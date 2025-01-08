@@ -7,10 +7,16 @@
 import json
 import os
 
+from logging import getLogger, config
+with open("log_config.json", "r") as cf:
+    log_conf = json.load(cf)
+config.dictConfig(log_conf)
+logger = getLogger(__name__)
+
 # ------------------------ 操作するファイルリストを読み込み ------------------------ #
 # -------------------- 将来的にはGUIから操作できるようにする予定 -------------------- #
 
-with open("loader.json") as f:
+with open("loader.json", "r") as f:
     loader = json.load(f)
 
 # --------------------------------- フラグリスト -------------------------------- #
@@ -32,15 +38,25 @@ def enable_mod(loader, flag):
         true: Modの有効化に成功。
         false: Modの有効化に失敗。
     """
+    # ローダーチェック
+    # dinput8.dll が含まれているかチェックする
+
+    for i in loader["loader"]:
+        if i in "dinput8.dll":
+            logger.info("dinput8.dllの含まれるjsonを検出しました")
+            break
+        else:
+            logger.error("このjsonにはdinput8.dllが含まれていません!")
+
     # フラグチェック
     # flagがTrueならModがすでに有効であるためFalseを返却
     # flagがFalseならModが無効であるため処理を開始
     if flag is True:  # Modが有効である場合
-        print("[ERROR]; Modはすでに有効です!")
+        logger.error("Modはすでに有効です!")
         return False
     else:
         try:
-            # なんやかんや
+            # ローダーの中身をforで
             return True
         except:  # 例外発生、Flake8が怒るけど知らん・・・
             # なんやかんや
