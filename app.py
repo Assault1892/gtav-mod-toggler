@@ -13,11 +13,15 @@ with open("log_config.json", "r") as cf:
 config.dictConfig(log_conf)
 logger = getLogger(__name__)
 
+logger.info("モジュールのロード完了")
+
 # ------------------------ 操作するファイルリストを読み込み ------------------------ #
 # -------------------- 将来的にはGUIから操作できるようにする予定 -------------------- #
 
 with open("loader.json", "r") as f:
     loader = json.load(f)
+
+logger.info("ローダーのJSONのロード完了")
 
 # --------------------------------- フラグリスト -------------------------------- #
 
@@ -41,9 +45,10 @@ def enable_mod(loader, flag):
     # ローダーチェック
     # dinput8.dll が含まれているかチェックする
 
+    logger.info("ローダーチェック")
     for i in loader["loader"]:
         if i in "dinput8.dll":
-            logger.info("dinput8.dllの含まれるjsonを検出しました")
+            logger.info("dinput8.dllの含まれるjsonを検出")
             break
         else:
             logger.error("このjsonにはdinput8.dllが含まれていません!")
@@ -56,14 +61,17 @@ def enable_mod(loader, flag):
         return False
     else:
         try:
-            # ローダーの中身をforで
+            # ローダーの中身をforで回して各ファイルを取得
+
+            logger.info("ローダーのリスト取得開始")
+            loader_list = []
+            for i in loader["loader"]:
+                loader_list.append(i)
+            logger.info("ローダーのリストの取得完了")
+
+            # GTA5のゲームディレクトリ内のファイルの存在確認
+
             return True
         except:  # 例外発生、Flake8が怒るけど知らん・・・
             # なんやかんや
             return False
-
-
-def change_flag(new_flag):
-    # フラグを変更するだけ、バグのもとかも・・・
-    global MOD_FLAG
-    MOD_FLAG = new_flag
