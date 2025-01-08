@@ -30,6 +30,8 @@ MOD_FLAG = False
 
 # ------------------------------------ 関数 ------------------------------------ #
 
+# Modを有効化
+
 
 def enable_mod(loader, flag):
     """Modを有効化する。
@@ -75,3 +77,12 @@ def enable_mod(loader, flag):
         except:  # 例外発生、Flake8が怒るけど知らん・・・
             # なんやかんや
             return False
+
+# Modを無効化
+
+
+def disable_mod(loader, flag):
+    # なんやかんや
+    return True
+
+# ---------------------------------- メインコード ---------------------------------- #
