@@ -35,8 +35,12 @@ GTAV_DIR = "C:/Users/Assault/Desktop/GTAVTogglerTest"
 # ------------------------------------ 関数 ------------------------------------ #
 
 # フラグをチェック
-# def check_flag(gamedir):
-#     return False
+
+
+def check_flag(gamedir):
+    # フラグファイルの存在確認
+    # 存在しなければローダーのリストと照らし合わせて全てenabledの状態にしてフラグファイル作成
+    return False
 
 # Modを有効化
 
