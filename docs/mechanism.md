@@ -16,16 +16,16 @@ Modローダーのインジェクト自体は多分[こんな感じの方法](ht
 - `ScriptHookVDotNet3.dll`
   - 「ScriptHookV」のプラグインを.NETを使って書けるやつ のローダー  
     「ScriptHookVDotNet」の本体
-- `mod_[flag]`
+- `mod_flag`
   - このツールが作成するファイル  
-    `[flag]` が `enabled` のときはModが有効、`disabled` のときは無効
+    ファイルの中身が `enabled` のときはModが有効、`disabled` のときは無効
 
 `.asi` ファイルや `scripts` ディレクトリ、その他 `.ini` `.xml` ファイルに対しては改変をしません  
 `.asi` `scripts` は各種Modのファイルが、 `.ini` `.xml` は各種Modの設定ファイルだったりするため、変に壊しても嫌
 
 ## 改変内容
 
-`mod_[flag]` ファイルを参照してフラグによってファイル名末尾の `.disabled` をつけたり外したりするだけ  
+`mod_flag` ファイルを参照してフラグによってファイル名末尾の `.disabled` をつけたり外したりするだけ  
 それ以外のことは一切やりません
 
 ゲームがModデータ (`.asi`とか) を読み込む仕組み的に、全てのModデータや `mods` ディレクトリを操作しなくとも、大元の踏み台DLLを読まないようにすればいいので、極論 `.disabled` を末尾につけずとも `.dll` 拡張子を外すだけでもいいです  
