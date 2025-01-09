@@ -95,7 +95,7 @@ def enable_mod(gamedir, modloader, modflag):
             # フラグを反転する
 
             return True
-        except:  # 例外発生、Flake8が怒るけど知らん・・・
+        except FileNotFoundError:  # ファイルが存在しない場合
             # なんやかんや
             return False
 # Modを無効化
