@@ -1,9 +1,6 @@
 {
     "loader": [
         "args.txt",
-        "dinput8.dll",
-        "ScriptHookV.dll",
-        "ScriptHookVDotNet2.dll",
-        "ScriptHookVDotNet3.dll"
+        "dinput8.dll"
     ]
 }

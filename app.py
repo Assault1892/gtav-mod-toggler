@@ -4,10 +4,13 @@
 
 # ---------------------------- 各種モジュールをロード ---------------------------- #
 
+from logging import getLogger, config
 import json
 import os
 
-from logging import getLogger, config
+from win32com.client import Dispatch
+shell = Dispatch("Shell.Application")
+
 with open("log_config.json", "r") as cf:
     log_conf = json.load(cf)
 config.dictConfig(log_conf)
@@ -23,19 +26,29 @@ with open("loader.json", "r") as f:
 
 logger.info("ローダーのJSONのロード完了")
 
-# ------------------------------------ 変数 ------------------------------------ #
+# ------------------------------- inputとかで拾う ------------------------------- #
 
 # Modの有効/無効フラグ
 MOD_FLAG = False
 
 # GTAVのゲームディレクトリ
-# 絶対パスで指定！相対パスだとどうなるかわからん！
-GTAV_DIR = "C:/Users/Assault/Desktop/GTAVTogglerTest"
+GTAV_DIR = ""
 
 # ------------------------------------ 関数 ------------------------------------ #
 
-# フラグをチェック。フラグ変数に破壊的変更を加えるため注意！
-# めちゃくちゃ行儀が悪い関数になってしまった・・・
+# ゲームディレクトリが正しいかチェック
+# GTAV.exeの存在確認
+
+
+def check_gamedir(gamedir):
+    ns = shell.NameSpace(gamedir)
+    gamefile = os.path.join(gamedir + "GTA5.exe")
+
+    print(ns.Items())
+
+# フラグをチェック関数
+# オブジェクト作成時にフラグファイルの存在を確認し、状態によってフラグ変数を変更
+# 起動時にフラグファイルが存在しなければ dinput8.dll の状態に応じて変更
 
 
 def check_flag(gamedir):
@@ -61,72 +74,10 @@ def check_flag(gamedir):
             logger.error("フラグファイルが不正です!")  # ここのエラーハンドリングどうしよう？
     else:
         logger.info("フラグファイルが存在しません")
-        logger.info("Modファイルを有効化し、フラグファイルを作成...")
-        MOD_FLAG = True  # 強制的にフラグをTrueに変更
-        enable_mod(GTAV_DIR, MOD_LOADER)  # Modを有効化
 
 # Modを有効化
 
-
-def enable_mod(gamedir, modloader):
-    """Modを有効化する。
-
-    Args:
-        gamedir (str): ゲームディレクトリの絶対パス。
-        loader (json): 切り替えるModローダーのファイル名のjson。 loader を入れておけばとりあえずこまらん。
-
-    Returns:
-        true: Modの有効化に成功。
-        false: 何らかの原因でModの有効化に失敗。
-    """
-    # ローダーチェック
-    # dinput8.dll が含まれているかチェックする
-
-    logger.info("ローダーチェック")
-    for i in modloader["loader"]:
-        if i in "dinput8.dll":
-            logger.info("dinput8.dllの含まれるjsonを検出")
-            break
-        else:
-            logger.error("このjsonにはdinput8.dllが含まれていません!")
-            return False
-
-    # フラグチェック
-    # flagがTrueならModがすでに有効であるためFalseを返却
-    # flagがFalseならModが無効であるため処理を開始
-    if MOD_FLAG is True:  # Modが有効である場合
-        logger.error("Modはすでに有効です!")
-        return False
-    else:  # Modが無効
-        try:
-            # ローダーの中身をforで回して各ファイルを取得
-
-            logger.info("ローダーのリスト取得開始")
-            modloader_list = []
-            for i in modloader["loader"]:
-                modloader_list.append(i)
-            logger.info("ローダーのリストの取得完了")
-            logger.info("ローダー: " + modloader_list)
-
-            # GTA5のゲームディレクトリ内のファイルの存在確認
-
-            # ローダーのリストと照らし合わせて存在するファイルのみリストに格納
-            # ファイル名末尾にある .disabled を元に検出する
-
-            # ファイル名末尾にある .disabled を除去する
-
-            # フラグファイルを enabled に変更する
-
-            return True
-        except FileNotFoundError:  # ファイルが存在しない場合
-            # なんやかんや
-            return False
 # Modを無効化
-
-
-def disable_mod(loader, flag):
-    # なんやかんや
-    return True
 
 # ---------------------------------- メインコード ---------------------------------- #
 
@@ -135,4 +86,6 @@ print(" ------------------------------------------------------------------------
 print("#                            GTAV Mod Loader Toggler                           #")
 print(" ---------------------------------------------------------------------------- #")
 
-print("")
+gamedir = str(input("ゲームディレクトリのパスを入力: "))
+
+check_gamedir(gamedir)
