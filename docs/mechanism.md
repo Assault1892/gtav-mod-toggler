@@ -10,12 +10,6 @@ Modローダーのインジェクト自体は多分[こんな感じの方法](ht
     ゲーム起動時BattlEyeを無効化するための引数が書かれている
 - `dinput8.dll`
   - 「ScriptHookV」をロードするための踏み台
-- `ScriptHookV.dll`
-  - 「ScriptHookV」の本体
-- `ScriptHookVDotNet2.dll`
-- `ScriptHookVDotNet3.dll`
-  - 「ScriptHookV」のプラグインを.NETを使って書けるやつ のローダー  
-    「ScriptHookVDotNet」の本体
 - `mod_flag`
   - このツールが作成するファイル  
     ファイルの中身が `enabled` のときはModが有効、`disabled` のときは無効
@@ -28,5 +22,5 @@ Modローダーのインジェクト自体は多分[こんな感じの方法](ht
 `mod_flag` ファイルを参照してフラグによってファイル名末尾の `.disabled` をつけたり外したりするだけ  
 それ以外のことは一切やりません
 
-ゲームがModデータ (`.asi`とか) を読み込む仕組み的に、全てのModデータや `mods` ディレクトリを操作しなくとも、大元の踏み台DLLを読まないようにすればいいので、極論 `.disabled` を末尾につけずとも `.dll` 拡張子を外すだけでもいいです  
+ゲームがModデータ (`.asi`とか) を読み込む仕組み的に、全てのModデータや `mods` ディレクトリを操作しなくとも、大元の踏み台DLLである `dinput8.dll` を読まないようにすればいいので、極論 `.disabled` を末尾につけずとも `.dll` 拡張子を外すだけでもいいです  
 でも事故が怖いので念の為 `.disabled` 拡張子をつけたり外したりする方式に
